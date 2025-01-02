@@ -8,5 +8,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@types/ws": "^8.5.13",
+    "dotenv": "^16.4.7",
+    "ws": "^8.18.0"
+  }
 }
