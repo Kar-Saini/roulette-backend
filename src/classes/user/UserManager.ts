@@ -1,4 +1,4 @@
-require("dotenv");
+require("dotenv").config();
 import { WebSocket } from "ws";
 import User from "./User";
 import { OutgoingMesssage } from "../../types/types";
@@ -36,6 +36,6 @@ export default class UserManager {
     this._users[userId].won(amount, betOnNumber, result);
   }
   lost(userId: string, amount: number, betOnNumber: number, result: number) {
-    this._users[userId].won(amount, betOnNumber, result);
+    this._users[userId].lost(amount, betOnNumber, result);
   }
 }

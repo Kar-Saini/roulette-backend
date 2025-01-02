@@ -25,19 +25,21 @@ export default class GameManager {
   }
 
   startGame() {
-    if (this.gameState !== GameState.GameOVer) {
+    if (this.gameState === GameState.GameOVer) {
       this.gameState = GameState.CanBet;
     }
     UserManager.getInstance().broadcast({ type: "game-started" });
   }
   stopBets() {
     if (this.gameState === GameState.CanBet) {
-      this.gameState = GameState.CanBet;
+      this.gameState = GameState.CantBet;
     }
     UserManager.getInstance().broadcast({ type: "bets-stopped" });
   }
   endGame(result: number) {
+    console.log(this.gameState);
     if (this.gameState === GameState.CantBet) {
+      console.log(result);
       this.gameState = GameState.GameOVer;
       this.bets.forEach((bet) => {
         if (bet.betOnNumber === result) {

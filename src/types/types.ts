@@ -18,6 +18,7 @@ export type OutgoingMesssage =
       balance: number;
       betOnNumber: number;
       result: number;
+      wonAmount: number;
     }
   | {
       type: "lost";
@@ -35,6 +36,10 @@ export type OutgoingMesssage =
   | {
       type: "game-ended";
       result: number;
+    }
+  | {
+      type: "current-state";
+      gameState: GameState;
     };
 
 export type IncommingMessage =

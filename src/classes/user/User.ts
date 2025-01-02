@@ -12,7 +12,7 @@ export default class User {
   ws: WebSocket;
   private lockedAmount: number;
   private userId: string;
-  isAdmin: Boolean;
+  isAdmin: boolean;
 
   constructor(ws: WebSocket, userId: string, name: string, isAdmin: boolean) {
     this.balance = 2500;
@@ -22,6 +22,10 @@ export default class User {
     this.userId = userId;
     this.isAdmin = isAdmin;
     this.initHandlers();
+    this.send({
+      type: "current-state",
+      gameState: GameManager.getInstance().gameState,
+    });
   }
   initHandlers() {
     this.ws.on("message", (data: string) => {
@@ -87,6 +91,7 @@ export default class User {
       balance: this.balance,
       betOnNumber,
       result,
+      wonAmount,
     });
   }
   lost(amount: number, betOnNumber: number, result: number) {
