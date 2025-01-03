@@ -37,9 +37,7 @@ export default class GameManager {
     UserManager.getInstance().broadcast({ type: "bets-stopped" });
   }
   endGame(result: number) {
-    console.log(this.gameState);
     if (this.gameState === GameState.CantBet) {
-      console.log(result);
       this.gameState = GameState.GameOVer;
       this.bets.forEach((bet) => {
         if (bet.betOnNumber === result) {
@@ -59,6 +57,7 @@ export default class GameManager {
         }
       });
       this.bets = [];
+      UserManager.getInstance().flush();
       UserManager.getInstance().broadcast({
         type: "game-ended",
         result: result,

@@ -1,16 +1,13 @@
 import { WebSocket } from "ws";
 import GameManager from "../game/GameManager";
-import {
-  GameState,
-  IncommingMessage,
-  OutgoingMesssage,
-} from "../../types/types";
+import { IncommingMessage, OutgoingMesssage } from "../../types/types";
+
 const MULTIPLIER = 17;
 export default class User {
   private name: string;
   private balance: number;
   ws: WebSocket;
-  private lockedAmount: number;
+  lockedAmount: number;
   private userId: string;
   isAdmin: boolean;
 
@@ -25,6 +22,8 @@ export default class User {
     this.send({
       type: "current-state",
       gameState: GameManager.getInstance().gameState,
+      balance: this.balance,
+      userId,
     });
   }
   initHandlers() {
@@ -32,7 +31,7 @@ export default class User {
       const message: IncommingMessage = JSON.parse(data);
       switch (message.type) {
         case "bet":
-          this.bet(message.amount, message.betOnNumber, message.clientId);
+          this.bet(message.amount, message.betOnNumber, message.clientId || "");
           break;
         case "start-game":
           if (this.isAdmin) {
@@ -48,6 +47,13 @@ export default class User {
           if (this.isAdmin) {
             GameManager.getInstance().stopBets();
           }
+          break;
+        case "get-user-data":
+          this.send({
+            type: "user-data",
+            balance: this.balance,
+            gameState: GameManager.getInstance().gameState,
+          });
           break;
       }
     });
@@ -67,6 +73,7 @@ export default class User {
         balance: this.balance,
         lockedAmount: this.lockedAmount,
         clientId,
+        betOnNumber,
       });
     } else {
       this.send({
@@ -75,6 +82,7 @@ export default class User {
         balance: this.balance,
         lockedAmount: this.lockedAmount,
         clientId,
+        betOnNumber,
       });
     }
   }
@@ -102,5 +110,9 @@ export default class User {
       lostAmount: amount,
       result,
     });
+  }
+
+  flush() {
+    this.lockedAmount = 0;
   }
 }

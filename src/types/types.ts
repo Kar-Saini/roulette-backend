@@ -4,7 +4,8 @@ export type OutgoingMesssage =
       amount: number;
       lockedAmount: number;
       balance: number;
-      clientId: string;
+      clientId?: string;
+      betOnNumber: number;
     }
   | {
       type: "bet-undo";
@@ -12,6 +13,7 @@ export type OutgoingMesssage =
       lockedAmount: number;
       balance: number;
       clientId: string;
+      betOnNumber: number;
     }
   | {
       type: "won";
@@ -40,15 +42,23 @@ export type OutgoingMesssage =
   | {
       type: "current-state";
       gameState: GameState;
+      balance: number;
+      userId: string;
+    }
+  | {
+      type: "user-data";
+      balance: number;
+      gameState: GameState;
     };
 
 export type IncommingMessage =
   | {
       type: "bet";
       amount: number;
-      clientId: string;
+      clientId?: string;
       betOnNumber: number;
     }
+  | { type: "get-user-data" }
   | { type: "start-game" }
   | { type: "end-game"; result: number }
   | { type: "stop-bets" };

@@ -16,7 +16,7 @@ export default class UserManager {
   }
   addUser(ws: WebSocket, name: string) {
     const userId = ID.toString();
-    const newUser = new User(ws, userId, name, name === process.env.ADMIN_NAME);
+    const newUser = new User(ws, userId, name, name === "KARTIK");
     this._users[userId] = newUser;
     newUser.ws.on("close", () => this.removeUser(userId));
     ID++;
@@ -37,5 +37,10 @@ export default class UserManager {
   }
   lost(userId: string, amount: number, betOnNumber: number, result: number) {
     this._users[userId].lost(amount, betOnNumber, result);
+  }
+  flush() {
+    Object.keys(this._users).forEach(
+      (userId) => (this._users[userId].lockedAmount = 0)
+    );
   }
 }
